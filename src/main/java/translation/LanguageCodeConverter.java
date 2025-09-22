@@ -39,15 +39,19 @@ public class LanguageCodeConverter {
             iterator.next(); // skip the first line
             while (iterator.hasNext()) {
                 String line = iterator.next();
-                int lcount = 0;
-                for (int i = 0; i < line.length(); i++) {
-                    if (line.charAt(i) == ' ') {
-                        break;
-                    }
-                    lcount ++;
+                if (line.charAt(line.length() - 3) != ' ') {
+                    languageCodeToLanguage.put("zh-tw", "Chinese (Taiwan)");
+                    languageToLanguageCode.put("Chinese (Taiwan)", "zh-tw");
                 }
-                String code = line.substring(0, lcount);
-                String name = line.substring(lcount);
+                String code = line.substring(line.length() - 2);
+                String subline = line.substring(0, line.length() - 2).trim();
+                while (subline.contains(",")){
+                    int index = subline.indexOf(",");
+                    String name = subline.substring(0, index);
+                    languageToLanguageCode.put(name, code);
+                    subline = subline.substring(index + 1).trim();
+                }
+                String name = subline.trim();
                 languageCodeToLanguage.put(code, name);
                 languageToLanguageCode.put(name, code);
             }
