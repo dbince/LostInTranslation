@@ -39,24 +39,16 @@ public class LanguageCodeConverter {
             iterator.next(); // skip the first line
             while (iterator.hasNext()) {
                 String line = iterator.next();
-                if (line.charAt(line.length() - 3) != ' ') {
-                    languageCodeToLanguage.put("zh-tw", "Chinese (Taiwan)");
-                    languageToLanguageCode.put("Chinese (Taiwan)", "zh-tw");
-                }
-                String code = line.substring(line.length() - 2);
-                String subline = line.substring(0, line.length() - 2).trim();
-                while (subline.contains(",")){
-                    int index = subline.indexOf(",");
-                    String name = subline.substring(0, index);
-                    languageToLanguageCode.put(name, code);
-                    subline = subline.substring(index + 1).trim();
-                }
-                String name = subline.trim();
-                languageCodeToLanguage.put(code, name);
-                languageToLanguageCode.put(name, code);
-            }
+                // Task A: use line to populate the instance variables
+                String[] parts = line.split("\t");
+                languageCodeToLanguage.put(parts[1].trim(), parts[0].trim());
 
-        } catch (IOException | URISyntaxException ex) {
+                String[] languages = parts[0].split(",");
+                for (String language : languages) {
+                    languageToLanguageCode.put(language.trim(), parts[1].trim());
+                }
+            }
+            } catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
     }
